@@ -166,7 +166,6 @@
           this.goods[type].list.push(...res.data.list)
           //list入栈之后页码在当前基础之上加一
           this.goods[type].page += 1
-
         })
 
 
