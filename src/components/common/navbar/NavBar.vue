@@ -29,18 +29,14 @@
     height: 44px;
     line-height: 44px;
     text-align: center;
-
   }
 
   .left,
   .right {
     width: 1.6rem;
-
-
   }
 
   .center {
     flex: 1;
-
   }
 </style>
