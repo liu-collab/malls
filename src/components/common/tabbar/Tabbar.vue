@@ -25,5 +25,6 @@
     background-color: #f6f6f6;
     height: 49px;
     box-shadow: 0px -3px 1px rgba(0, 0, 0, .05);
+
   }
 </style>

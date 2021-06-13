@@ -46,23 +46,23 @@
       }
     },
     //
-    // mounted: function () {
-    //   // 1.操作DOM, 在前后添加Slide
-    //   setTimeout(() => {
-    //     this.handleDom();
-
-    //     // 2.开启定时器
-    //     this.startTimer();
-    //   }, 500)
-    // },
-    updated: function () {
+    mounted: function () {
       // 1.操作DOM, 在前后添加Slide
-      if (this.slideCount === 0 && this.playTimer === null) {
+      setTimeout(() => {
         this.handleDom();
+
         // 2.开启定时器
         this.startTimer();
-      }
+      }, 500)
     },
+    // updated: function () {
+    //   // 1.操作DOM, 在前后添加Slide
+    //   if (this.slideCount === 0 && this.playTimer === null) {
+    //     this.handleDom();
+    //     // 2.开启定时器
+    //     this.startTimer();
+    //   }
+    // },
     methods: {
       /**
        * 定时器操作

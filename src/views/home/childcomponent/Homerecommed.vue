@@ -30,7 +30,7 @@
     methods: {
     },
   }
-  //git remote add origin https://github.com/liu-collab/malls.git^X
+  //git remote add origin https://github.com/liu-collab/malls.git
 </script>
 <style scoped>
   .recommed {

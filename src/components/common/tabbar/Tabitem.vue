@@ -41,9 +41,10 @@
 
     },
     methods: {
-      itemclick() {
+      itemclick(index) {
         // console.log('itemclick')
         this.$router.replace(this.path)
+
 
 
       }

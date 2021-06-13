@@ -25,6 +25,8 @@
     methods: {
       tabclick(index) {
         this.iscurrnet = index
+        this.$emit('tabClick', index)
+        console.log(index)
       }
     },
   }

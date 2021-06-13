@@ -3,112 +3,18 @@
     <Navbar class="home-nav">
       <div slot="center">购物街</div>
     </Navbar>
-    <home-swiper :banners="banners" class="home-swiper"></home-swiper>
-    <Homerecommed :recommends="recommends"></Homerecommed>
-    <feature></feature>
-    <tab-contorl class="tab-contorl" :titles="['流行' , '新款' , '精选']"></tab-contorl>
-    <ul>
-      <li>1</li>
-      <li>2</li>
-      <li>3</li>
-      <li>4</li>
-      <li>5</li>
-      <li>6</li>
-      <li>7</li>
-      <li>8</li>
-      <li>9</li>
-      <li>10</li>
-      <li>11</li>
-      <li>12</li>
-      <li>13</li>
-      <li>14</li>
-      <li>15</li>
-      <li>16</li>
-      <li>17</li>
-      <li>18</li>
-      <li>19</li>
-      <li>20</li>
-      <li>21</li>
-      <li>22</li>
-      <li>23</li>
-      <li>24</li>
-      <li>25</li>
-      <li>26</li>
-      <li>27</li>
-      <li>28</li>
-      <li>29</li>
-      <li>30</li>
-      <li>31</li>
-      <li>32</li>
-      <li>33</li>
-      <li>34</li>
-      <li>35</li>
-      <li>36</li>
-      <li>37</li>
-      <li>38</li>
-      <li>39</li>
-      <li>40</li>
-      <li>41</li>
-      <li>42</li>
-      <li>43</li>
-      <li>44</li>
-      <li>45</li>
-      <li>46</li>
-      <li>47</li>
-      <li>48</li>
-      <li>49</li>
-      <li>50</li>
-      <li>51</li>
-      <li>52</li>
-      <li>53</li>
-      <li>54</li>
-      <li>55</li>
-      <li>56</li>
-      <li>57</li>
-      <li>58</li>
-      <li>59</li>
-      <li>60</li>
-      <li>61</li>
-      <li>62</li>
-      <li>63</li>
-      <li>64</li>
-      <li>65</li>
-      <li>66</li>
-      <li>67</li>
-      <li>68</li>
-      <li>69</li>
-      <li>70</li>
-      <li>71</li>
-      <li>72</li>
-      <li>73</li>
-      <li>74</li>
-      <li>75</li>
-      <li>76</li>
-      <li>77</li>
-      <li>78</li>
-      <li>79</li>
-      <li>80</li>
-      <li>81</li>
-      <li>82</li>
-      <li>83</li>
-      <li>84</li>
-      <li>85</li>
-      <li>86</li>
-      <li>87</li>
-      <li>88</li>
-      <li>89</li>
-      <li>90</li>
-      <li>91</li>
-      <li>92</li>
-      <li>93</li>
-      <li>94</li>
-      <li>95</li>
-      <li>96</li>
-      <li>97</li>
-      <li>98</li>
-      <li>99</li>
-      <li>100</li>
-    </ul>
+    <!-- probeType 传出probeType的值，根据需求是否实时监听 -->
+    <scroll class="content" ref="content" :probeType="3" @backtop="backtopClick" :pull-up-load="true"
+      @pullingUp="pullingUp">
+      <home-swiper :banners="banners" class="home-swiper"></home-swiper>
+      <Homerecommed :recommends="recommends"></Homerecommed>
+      <feature></feature>
+      <tab-contorl class="tab-contorl" :titles="['流行' , '新款' , '精选']" @tabClick="tabClick"></tab-contorl>
+      <goodsitem :goodslist="goods[currentType].list"></goodsitem>
+    </scroll>
+    <!-- native监听原生点击事件vue组件没有事件 -->
+    <back-top @click.native="backClick" v-show="iscurrent"></back-top>
+
   </div>
 </template>
 <script>
@@ -119,10 +25,24 @@
 
   import Navbar from 'components/common/navbar/NavBar'
   import TabContorl from 'components/content/TabContorl'
+  import goodsitem from 'components/content/goods/goodsitem'
+  import scroll from 'components/common/scroll/Scroll'
+  import BackTop from 'components/content/backtop/BackTop'
   import { getHomeMultidata, getHomeGoods } from 'network/home'
   export default {
     name: 'Home',
     props: [''],
+    components: {
+      HomeSwiper,
+      Homerecommed,
+      feature,
+      Navbar,
+      TabContorl,
+      goodsitem,
+      scroll,
+      BackTop
+
+    },
     data() {
       return {
         name: "首页",
@@ -133,20 +53,62 @@
           'pop': { page: 0, list: [] },
           'new': { page: 0, list: [] },
           'sell': { page: 0, list: [] },
-        }
+        },
+        //设置当前默认类型
+        currentType: 'pop',
+        //用参数决定是否显示
+        iscurrent: false
       };
     },
     //在DOM元素创建完成之后发送网络请求
     created() {
-
       this.getHomeMultidata()
       this.getHomeGoods('pop')
       this.getHomeGoods('new')
       this.getHomeGoods('sell')
-
-
     },
     methods: {
+      tabClick(index) {
+        /*
+        *事件监听相关事件
+        * */
+        // if(index = 1){
+        //   this.currentType = 'pop'
+        // }
+        //根据tab栏点击不同的类型获取不同的数据
+        switch (index) {
+          case 0:
+            this.currentType = 'pop'
+            break
+          case 1:
+            this.currentType = 'new'
+            break
+          case 2:
+            this.currentType = 'sell'
+            break
+        }
+      },
+      backClick() {
+        //监听组件点击事件，引用scroll里面的scrollTo事件回到顶部，scrollTo（x,y,time）
+        this.$refs.content.scrollTo(0, 0, 500)
+
+      },
+      //监听滚动事件，滚动到响应位置，backtop图标显示
+      //子组件发射position，这里直接接收
+      backtopClick(position) {
+        this.iscurrent = (-position.y > 600)
+
+      },
+      pullingUp() {
+        //调用getHomeGoods方法加载相应内容图片
+        this.getHomeGoods(this.currentType)
+        //等图片都从服务器端加载过来后刷新一次，防止出现better-scroll出现不能刷新
+        this.$refs.content.scroll.refresh()
+      },
+      /*
+      *
+       * 网络请求相关类型
+      */
       //函数封装
       getHomeMultidata() {
         //getHomeMultidata promise函数
@@ -166,24 +128,22 @@
           this.goods[type].list.push(...res.data.list)
           //list入栈之后页码在当前基础之上加一
           this.goods[type].page += 1
+          //上拉加载更多后结束上拉事件，不结束的话上拉方法只能调用一次
+          this.$refs.content.finishPullUp()
         })
 
 
 
       }
     },
-    components: {
-      HomeSwiper,
-      Homerecommed,
-      feature,
-      Navbar,
-      TabContorl,
-    }
+
   }
 </script>
 <style scoped>
   #home {
     padding-top: 44px;
+    height: 100vh;
+    position: relative;
   }
 
   .home-nav {
@@ -193,12 +153,22 @@
     top: 0;
     left: 0;
     right: 0;
-    z-index: 9999;
+    z-index: 9;
 
   }
 
   .tab-contorl {
     position: sticky;
     top: 44px;
+    z-index: 9;
+  }
+
+  .content {
+    position: absolute;
+    overflow: hidden;
+    top: 44px;
+    bottom: 49px;
+    left: 0;
+    right: 0;
   }
 </style>
