@@ -29,7 +29,9 @@
     mounted() {
       this.scroll = new BScroll(this.$refs.warpper, {
         probeType: this.probeType,
-        pullUpLoad: this.pullUpLoad
+        pullUpLoad: this.pullUpLoad,
+        //better-scroll 在div点击事件上需要把click设置为true，不然不能点击
+        click: true
       }),
         //监听滚动事件，发射相应事件和position给父组件
         this.scroll.on('scroll', (position) => {
@@ -39,16 +41,23 @@
       this.scroll.on('pullingUp', () => {
         this.$emit('pullingUp')
 
+        console.log(this.scroll)
       })
     },
     methods: {
       //封装scrollTo方法
       scrollTo(x, y, time) {
-        this.scroll.scrollTo(0, 0, 300)
+        this.scroll && this.scroll.scrollTo(0, 0, 300)
       },
       // 封装finishPullUp
       finishPullUp() {
         this.scroll.finishPullUp()
+      },
+      //封装refresh
+      refresh() {
+        //这里进行相与确保scroll创建出来了
+        this.scroll && this.scroll.refresh()
+        console.log('----------')
       }
 
     },

@@ -1,6 +1,6 @@
 <template>
   <div class="goods-item">
-    <img :src="goodslistitem.show.img" alt="">
+    <img :src="goodslistitem.show.img" alt="" @load="imgload">
     <div class="goods-info">
       <p>{{ goodslistitem.title }}</p>
       <span class="price">{{goodslistitem.price }}</span>
@@ -24,6 +24,14 @@
       };
     },
     methods: {
+      imgload() {
+        //解决better-scroll偶发滑动不了，
+        //主要原因是图片因网速原因导致没有及时加载完成，但是better-scroll的高度已经计算出来了
+        //利用vue的时间总线事件监听图片加载完成，每张图片加载完成，让better-scroll刷新一次
+        //这里的$bus在vue的原型里面没有，需要手动添加在main.js里面
+        //利用时间总线发射相应事件
+        this.$bus.$emit('itemimgload')
+      }
     },
   }
 </script>

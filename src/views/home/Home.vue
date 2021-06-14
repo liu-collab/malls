@@ -1,15 +1,21 @@
 <template>
   <div id="home">
+
     <Navbar class="home-nav">
       <div slot="center">购物街</div>
     </Navbar>
+    <!-- 用一个不显示tancontorl,等到到了相应位置在进行一个显示 -->
+    <tab-contorl class="tab-contorl" ref="tabcontorl1" :titles="['流行' , '新款' , '精选']" @tabClick="tabClick"
+      v-show="isshow">
+    </tab-contorl>
     <!-- probeType 传出probeType的值，根据需求是否实时监听 -->
     <scroll class="content" ref="content" :probeType="3" @backtop="backtopClick" :pull-up-load="true"
       @pullingUp="pullingUp">
-      <home-swiper :banners="banners" class="home-swiper"></home-swiper>
+      <home-swiper :banners="banners" class="home-swiper" @itemimagload="itemimagload"></home-swiper>
       <Homerecommed :recommends="recommends"></Homerecommed>
       <feature></feature>
-      <tab-contorl class="tab-contorl" :titles="['流行' , '新款' , '精选']" @tabClick="tabClick"></tab-contorl>
+      <tab-contorl ref="tabcontorl2" :titles="['流行' , '新款' , '精选']" @tabClick="tabClick">
+      </tab-contorl>
       <goodsitem :goodslist="goods[currentType].list"></goodsitem>
     </scroll>
     <!-- native监听原生点击事件vue组件没有事件 -->
@@ -29,6 +35,8 @@
   import scroll from 'components/common/scroll/Scroll'
   import BackTop from 'components/content/backtop/BackTop'
   import { getHomeMultidata, getHomeGoods } from 'network/home'
+  import { debounce } from 'common/utils/debounce'
+
   export default {
     name: 'Home',
     props: [''],
@@ -56,8 +64,12 @@
         },
         //设置当前默认类型
         currentType: 'pop',
-        //用参数决定是否显示
-        iscurrent: false
+        //用参数决定backtop是否显示
+        iscurrent: false,
+        //保存tancontorl的高度
+        taboffsetTop: 0,
+        //决定tabcontrol是否显示
+        isshow: false
       };
     },
     //在DOM元素创建完成之后发送网络请求
@@ -86,7 +98,11 @@
           case 2:
             this.currentType = 'sell'
             break
+
         }
+        this.$refs.tabcontorl1.iscurrnet = index
+        this.$refs.tabcontorl2.iscurrnet = index
+
       },
       backClick() {
         //监听组件点击事件，引用scroll里面的scrollTo事件回到顶部，scrollTo（x,y,time）
@@ -96,8 +112,11 @@
       //监听滚动事件，滚动到响应位置，backtop图标显示
       //子组件发射position，这里直接接收
       backtopClick(position) {
+        //1.判断backtop是否显示
         this.iscurrent = (-position.y > 600)
 
+        //2.判断tabcontrol是否吸顶
+        this.isshow = (-position.y > this.taboffsetTop)
       },
       pullingUp() {
         //调用getHomeGoods方法加载相应内容图片
@@ -105,8 +124,10 @@
         //等图片都从服务器端加载过来后刷新一次，防止出现better-scroll出现不能刷新
         this.$refs.content.scroll.refresh()
       },
+      itemimagload() {
+        this.taboffsetTop = this.$refs.tabcontorl2.$el.offsetTop
+      },
       /*
-      *
        * 网络请求相关类型
       */
       //函数封装
@@ -133,7 +154,6 @@
         })
 
 
-
       }
     },
 
@@ -141,7 +161,7 @@
 </script>
 <style scoped>
   #home {
-    padding-top: 44px;
+
     height: 100vh;
     position: relative;
   }
@@ -149,17 +169,16 @@
   .home-nav {
     background-color: var(--color-tint);
     color: #ffff;
-    position: fixed;
+    /* position: fixed;
     top: 0;
     left: 0;
     right: 0;
-    z-index: 9;
+    z-index: 9; */
 
   }
 
   .tab-contorl {
-    position: sticky;
-    top: 44px;
+    position: relative;
     z-index: 9;
   }
 

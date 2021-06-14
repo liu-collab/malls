@@ -1,21 +1,21 @@
 <template>
-  <div id="app">
-    <router-view></router-view>
-    <MainTab></MainTab>
-  </div>
+    <div id="app">
+        <router-view></router-view>
+        <MainTab></MainTab>
+    </div>
 </template>
 
 <script>
-  import MainTab from 'components/content/MainTab'
+import MainTab from 'components/content/MainTab'
 
-  export default {
+export default {
     name: 'App',
     components: {
-      MainTab
+        MainTab
     }
-  }
+}
 </script>
 
 <style>
-  @import 'assets/css/base.css';
+@import 'assets/css/base.css';
 </style>
