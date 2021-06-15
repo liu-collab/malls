@@ -41,13 +41,15 @@
       this.scroll.on('pullingUp', () => {
         this.$emit('pullingUp')
 
-        console.log(this.scroll)
+        // console.log(this.scroll)
       })
     },
     methods: {
       //封装scrollTo方法
       scrollTo(x, y, time) {
-        this.scroll && this.scroll.scrollTo(0, 0, 300)
+        this.scroll && this.scroll.scrollTo(0, 0, 0)
+
+
       },
       // 封装finishPullUp
       finishPullUp() {
@@ -57,7 +59,11 @@
       refresh() {
         //这里进行相与确保scroll创建出来了
         this.scroll && this.scroll.refresh()
-        console.log('----------')
+        // console.log('----------')
+      },
+      getScrollY() {
+        return this.scroll ? this.scroll.y : 0
+
       }
 
     },

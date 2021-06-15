@@ -69,7 +69,8 @@
         //保存tancontorl的高度
         taboffsetTop: 0,
         //决定tabcontrol是否显示
-        isshow: false
+        isshow: false,
+        saveY: 0
       };
     },
     //在DOM元素创建完成之后发送网络请求
@@ -78,6 +79,22 @@
       this.getHomeGoods('pop')
       this.getHomeGoods('new')
       this.getHomeGoods('sell')
+    },
+    destroyed() {
+      console.log('11111')
+    },
+    activated() {
+      //在回到home页面时拿到离开时保存的y轴信息
+      //利用scroll回到离开时的y轴
+
+      this.$refs.content.scroll.scrollTo(0, this.saveY)
+      //回来时刷新一次，防止bug出现
+      this.$refs.content.refresh()
+    },
+    deactivated() {
+      //在离开home页面时保存当前y轴的信息
+      this.saveY = this.$refs.content.getScrollY()
+      // console.log(this.saveY)
     },
     methods: {
       tabClick(index) {
@@ -152,8 +169,6 @@
           //上拉加载更多后结束上拉事件，不结束的话上拉方法只能调用一次
           this.$refs.content.finishPullUp()
         })
-
-
       }
     },
 

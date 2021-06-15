@@ -1,6 +1,6 @@
 <template>
   <div class="goods-item">
-    <img :src="goodslistitem.show.img" alt="" @load="imgload">
+    <img :src="goodslistitem.show.img" alt="" @load="imgload" @click="itemclick">
     <div class="goods-info">
       <p>{{ goodslistitem.title }}</p>
       <span class="price">{{goodslistitem.price }}</span>
@@ -31,6 +31,9 @@
         //这里的$bus在vue的原型里面没有，需要手动添加在main.js里面
         //利用时间总线发射相应事件
         this.$bus.$emit('itemimgload')
+      },
+      itemclick() {
+        this.$router.push('/detail' + this.goodslistitem.iid)
       }
     },
   }
