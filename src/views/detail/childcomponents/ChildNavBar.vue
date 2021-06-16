@@ -28,6 +28,7 @@
     methods: {
       itemclick(index) {
         this.iscurrent = index;
+        this.$emit('itemclick', index);
       },
       back() {
         this.$router.back();

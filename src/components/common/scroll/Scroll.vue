@@ -59,7 +59,7 @@
       refresh() {
         //这里进行相与确保scroll创建出来了
         this.scroll && this.scroll.refresh()
-        // console.log('----------')
+        //console.log('----------')
       },
       getScrollY() {
         return this.scroll ? this.scroll.y : 0

@@ -35,7 +35,8 @@
   import scroll from 'components/common/scroll/Scroll'
   import BackTop from 'components/content/backtop/BackTop'
   import { getHomeMultidata, getHomeGoods } from 'network/home'
-  import { debounce } from 'common/utils/debounce'
+
+  import { itemimagloadMixin } from 'common/utils/mixin'
 
   export default {
     name: 'Home',
@@ -70,7 +71,9 @@
         taboffsetTop: 0,
         //决定tabcontrol是否显示
         isshow: false,
-        saveY: 0
+        //保存y轴信息
+        saveY: 0,
+
       };
     },
     //在DOM元素创建完成之后发送网络请求
@@ -80,8 +83,10 @@
       this.getHomeGoods('new')
       this.getHomeGoods('sell')
     },
-    destroyed() {
-      console.log('11111')
+    //混入相应的事件，混入的mouted事件，
+    mixins: [itemimagloadMixin],
+    mounted() {
+
     },
     activated() {
       //在回到home页面时拿到离开时保存的y轴信息
@@ -95,6 +100,8 @@
       //在离开home页面时保存当前y轴的信息
       this.saveY = this.$refs.content.getScrollY()
       // console.log(this.saveY)
+      //离开页面取消this.itemimagloadListener 事件监听
+      this.$bus.$off('itemimgload', this.itemimagloadListener)
     },
     methods: {
       tabClick(index) {
@@ -115,11 +122,9 @@
           case 2:
             this.currentType = 'sell'
             break
-
         }
         this.$refs.tabcontorl1.iscurrnet = index
         this.$refs.tabcontorl2.iscurrnet = index
-
       },
       backClick() {
         //监听组件点击事件，引用scroll里面的scrollTo事件回到顶部，scrollTo（x,y,time）
@@ -142,6 +147,7 @@
         this.$refs.content.scroll.refresh()
       },
       itemimagload() {
+        //获取滚动的值
         this.taboffsetTop = this.$refs.tabcontorl2.$el.offsetTop
       },
       /*
