@@ -35,8 +35,13 @@
         //判断所有图片是否加载完成
         //需要用watch监听图片的长度，一次完成所有图片的length
         //这里只需比较一次就行,这样做可以提高程序的效率，但是用户体验还是会不能滚动（网络不好情况下）
+
+        //存在问题 这里
         if (++this.counter === this.imaglength) {
+          // console.log(this.imaglength)
           this.$emit('imageload');
+        } else {
+          // console.log(this.counter)
         }
         //每加载一张图片比较一次，并且发射一次事件
         //在detail里面刷新一次
@@ -46,15 +51,37 @@
         // }
         // if (++this.counter === this.GoodsInfo.detailImage[0].list.length) {
         //   this.$emit('imageload');
+        // } else {
+        //   console.log(this.counter)
         // }
       }
     },
     watch: {
       detailInfo() {
-        //监听图片的长度是否加载完成
         this.imaglength = this.GoodsInfo.detailImage[0].list.length
       }
+
     },
+
+    // watch: {
+    //   materielId: function () {//materielId为需要监听的data
+    //     this.$nextTick(function () {
+    //       //这里写方法
+    //     });
+    //   },
+    // }
+
+
+    // watch: {
+
+    //    this.$nextTick(detailInfo() {
+    //     //监听图片的长度是否加载完成
+    //     this.imaglength = this.GoodsInfo.detailImage[0].list.length
+    //   });
+
+
+    //},
+
   }
 </script>
 <style scoped>
