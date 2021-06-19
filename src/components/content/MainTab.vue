@@ -25,24 +25,24 @@
     </div>
 </template>
 <script>
-//webpack 路径修改 import可以省略./../直接引用既可 src 需要在前面加上~
-import tabbar from 'components/common/tabbar/Tabbar.vue'
-import tabitem from 'components/common/tabbar/Tabitem.vue'
+    //webpack 路径修改 import可以省略./../直接引用既可 src 需要在前面加上~
+    import tabbar from 'components/common/tabbar/Tabbar.vue'
+    import tabitem from 'components/common/tabbar/Tabitem.vue'
 
-export default {
-    name: 'MainTab',
-    props: [''],
-    data() {
-        return {};
-    },
-    methods: {},
-    components: {
-        tabbar,
-        tabitem
+    export default {
+        name: 'MainTab',
+        props: [''],
+        data() {
+            return {};
+        },
+        methods: {},
+        components: {
+            tabbar,
+            tabitem
 
-    },
+        },
 
-}
+    }
 </script>
 <style scoped>
 

@@ -1,5 +1,5 @@
 <template>
-  <div class="tabitem" @click="itemclick">
+  <div class="tabitem ignore" @click="itemclick">
     <div v-if="!isActive">
       <slot name="item-icon"></slot>
     </div>
