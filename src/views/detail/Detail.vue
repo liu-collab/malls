@@ -129,6 +129,7 @@
 
     },
     destroyed() {
+      //摧毁相应事件
       this.$bus.$off('itemimgload', this.itemimagloadListener)
     },
     mounted() {
